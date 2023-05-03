@@ -1,6 +1,24 @@
+:root {
+  --timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  --animation-duration: 250ms;
+}
+
 * {
   box-sizing: border-box;
 }
+ p {
+  margin: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+a, p, button{
+  text-decoration: none;
+}
+
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
@@ -12,9 +30,130 @@ body {
   line-height: 1.5;
 }
 
+form {
+  height: 96px;
+  margin: 0 auto;
+}
+
+input[type="text"] {
+  width: 35%;
+  height: 50px;  
+  font-size: 40px;
+  line-height: 1;
+  border-radius: 4px;
+  border: none;
+} 
+
+input[type="text"]::placeholder {
+  /* color: #22acdc; */
+  color:  rgb(18, 76, 112);
+} 
+
 #search-box {
   font: inherit;
   padding: 8px;
   max-width: 320px;
   margin-bottom: 16px;
+}
+
+.search-form{
+  background-color: rgb(110, 187, 234);
+
+  height: 100px;
+  box-shadow: 0px 2px 1px rgba(46, 47, 66, 0.08), 0px 1px 1px rgba(46, 47, 66, 0.16),
+  0px 1px 6px rgba(46, 47, 66, 0.08); 
+}
+
+.container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  padding-top: 16px;
+}
+
+.search {
+  padding: 8px 16px;
+  font-size: 20px;
+  color:#50b2d6;
+  width: 160px;
+  height: 50px;  
+  box-shadow: 0px 2px 1px rgba(46, 47, 66, 0.08), 0px 1px 1px rgba(46, 47, 66, 0.16),
+  0px 1px 6px rgba(46, 47, 66, 0.08); 
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  text-align: center;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  
+}
+
+.load-more{
+  display: flex;
+  margin: 50px auto 50px;
+  text-align: center;
+}
+
+.gallery{
+  margin-left:  auto;
+  margin-right: auto;
+  display: flex;
+  flex-wrap: wrap; 
+  justify-content: center;
+  padding-top: 60px;
+  gap: 24px 5px;
+
+}
+
+.photo-card{
+  cursor: pointer;
+  width: 300px;
+  height: 280px;
+  border-radius: 0px; 
+  box-shadow: 0px 2px 1px rgba(46, 47, 66, 0.08), 0px 1px 1px rgba(46, 47, 66, 0.16),
+  0px 1px 6px rgba(46, 47, 66, 0.08);
+}
+
+.photo-card:hover,
+.photo-card:focus{
+    border-radius: 6px;
+    box-shadow: 0px 5px 3px rgba(46, 47, 66, 0.08), 0px 3px 3px rgba(46, 47, 66, 0.16),
+    0px 3px 9px rgba(46, 47, 66, 0.08); 
+}
+
+.gallery__image {
+  display: block;
+  height: 80%;
+  width: 100%;
+  object-fit: cover;
+  transition: transform var(--animation-duration) var(--timing-function);
+}
+.info{
+  display: flex;
+  margin: 15px auto 15px auto;
+  /* height: 20%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center; */
+}
+
+.info-item{
+  display: flex;
+  margin: 8px auto 8px auto;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  text-align: center;
+  vertical-align: top;
+  color: #50b2d6;
+  box-shadow: 0 3px 1px #50b2d6, 0 0 0 1px #f0b6b6eb;
+}
+
+b {
+  color: #f0b6b6eb;
+  text-align: center;
 }

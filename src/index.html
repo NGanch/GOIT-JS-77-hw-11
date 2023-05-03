@@ -7,10 +7,22 @@
     <title>Homework 10</title>
   </head>
   <body>
-    <input type="text" id="search-box" />
-    <ul class="country-list"></ul>
-    <div class="country-info"></div>
-
+    <form class="search-form" id="search-form">
+      <div class = "container">
+      <input
+        type="text"
+        name="searchQuery"
+        autocomplete="off"
+        placeholder="Search images..."
+      />
+      <button class="search" type="submit">Search</button>
+    </div>
+    </form>
+    
+    <ul class="gallery">
+      <!-- Картки зображень -->
+    </ul>
+    <button type="button" class="load-more search">Load more</button>
     <script src="index.js" type="module"></script>
   </body>
 </html>
