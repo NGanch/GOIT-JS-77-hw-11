@@ -15,7 +15,7 @@ loadMore.addEventListener('click', onClick);
 loadMore.style.visibility = "hidden";
 
 let currentPage = 1;
-// const viewsImg = null;
+let searchImg = null;
 
     function onInput(evt) {
      evt.preventDefault();
@@ -28,11 +28,11 @@ let currentPage = 1;
         axiosImages(searchImg, currentPage)
           .then(data => {
             if (data.total) {
-              loadMore.style.visibility = 'visible';
               gallery.insertAdjacentHTML('beforeend', createMarkup(data));
               Notiflix.Notify.success(`Hooray! We found ${data.total} images.`);
-              let viewsImg = new SimpleLightbox('.gallery a');
+              viewsBigImg();
               scrollGallery();
+              loadMore.style.visibility = 'visible';
             } 
            
         })
@@ -48,14 +48,22 @@ function onClick(){
     .then(data => {
       if (data.total) {
         gallery.insertAdjacentHTML('beforeend', createMarkup(data));
-      }})
-    // gallery.insertAdjacentHTML('beforeend', createMarkup(data));
-     let totalPageImg = 40 * currentPage;
-        if (totalPageImg >= data.total) {
+        viewsBigImg();
+        let totalPageImg = 40 * currentPage;
+        if (totalPageImg === data.total){
               Notiflix.Notify.info(
-                "We're sorry, but you've reached the end of search results."
-              );
-            }    
+                "We're sorry, but you've reached the end of search results.");
+              loadMore.style.visibility = "hidden";
+           
+            }  
+      }})
+      .catch(err => console.log(err));
+    //  let totalPageImg = 40 * currentPage;
+    //     if (totalPageImg >= data.total){
+    //           Notiflix.Notify.info(
+    //             "We're sorry, but you've reached the end of search results.");
+    //           loadMore.style.visibility = "hidden";
+    //         }    
 }
 //-------------------------------- 4 скрол --------------------------
 function scrollGallery() {
@@ -65,6 +73,24 @@ function scrollGallery() {
       top: height * 2,
       behavior: 'smooth',
     });
+  }
+//-------------------------------- 5 закріплена шапка --------------------------
+const formrHeight = form.offsetHeight;
+const galleryHeight = gallery.offsetHeight;
+    window.addEventListener('scroll', () =>{
+let scrollDistance = window.scrollY;
+    if(scrollDistance >= galleryHeight){
+        form.classList.add('form-fixed');
+        gallery.style.marginTop = `${formrHeight}px`;
+    } else {
+        form.removeClass('form-fixed');
+        gallery.style.marginTop = null;
+    }
+    })
+//-------------------------------- 6 для перегляду фото --------------------------
+
+  function viewsBigImg() {
+   const viewsImg = new SimpleLightbox('.gallery a');
   }
 // -------------------------------3 Галерея і картка зображення --------------
 
