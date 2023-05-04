@@ -12,6 +12,7 @@ const gallery = document.querySelector('.gallery');
 
 form.addEventListener('submit', onInput);
 loadMore.addEventListener('click', onClick);
+
 loadMore.style.visibility = "hidden";
 
 let currentPage = 1;
@@ -28,6 +29,7 @@ let searchImg = null;
         axiosImages(searchImg, currentPage)
           .then(data => {
             if (data.total) {
+                formFixed();
               gallery.insertAdjacentHTML('beforeend', createMarkup(data));
               Notiflix.Notify.success(`Hooray! We found ${data.total} images.`);
               viewsBigImg();
@@ -75,18 +77,21 @@ function scrollGallery() {
     });
   }
 //-------------------------------- 5 закріплена шапка --------------------------
-const formrHeight = form.offsetHeight;
-const galleryHeight = gallery.offsetHeight;
-    window.addEventListener('scroll', () =>{
-let scrollDistance = window.scrollY;
-    if(scrollDistance >= galleryHeight){
-        form.classList.add('form-fixed');
-        gallery.style.marginTop = `${formrHeight}px`;
-    } else {
-        form.removeClass('form-fixed');
-        gallery.style.marginTop = null;
-    }
-    })
+function formFixed (){
+    const formrHeight = form.offsetHeight;
+    const galleryHeight = gallery.offsetHeight;
+        window.addEventListener('scroll', () =>{
+    let scrollDistance = window.scrollY;
+        if(scrollDistance >= galleryHeight){
+            form.classList.add('form-fixed');
+            gallery.style.marginTop = `${formrHeight}px`;
+        } else {
+            form.classList.remove('form-fixed');
+            gallery.style.marginTop = null;
+        }
+        })
+}
+
 //-------------------------------- 6 для перегляду фото --------------------------
 
   function viewsBigImg() {
