@@ -4,6 +4,7 @@ import {axiosImages} from './axiosImages';
 import Notiflix from 'notiflix';
  import SimpleLightbox from 'simplelightbox';
  import 'simplelightbox/dist/simple-lightbox.min.css';
+//  import OnlyScroll from 'only-scrollbar';
 // // ------------------------------ 1 Форма пошуку-------------------------
 
 const form = document.querySelector('.search-form');
@@ -75,6 +76,11 @@ function scrollGallery() {
       top: height * 2,
       behavior: 'smooth',
     });
+//     const scroll = new OnlyScroll(gallery, {
+//         damping: 4,
+     
+//         eventContainer: window});
+// scroll.destroy();
   }
 //-------------------------------- 5 закріплена шапка --------------------------
 function formFixed (){

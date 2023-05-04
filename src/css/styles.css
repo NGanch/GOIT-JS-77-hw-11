@@ -127,6 +127,7 @@ input {
   flex-wrap: wrap; 
   justify-content: center;
   padding-top: 60px;
+  overflow: auto;
   gap: 24px 5px;
 }
 
