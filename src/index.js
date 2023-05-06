@@ -2,85 +2,107 @@ import './css/styles.css';
 
 import {axiosImages} from './axiosImages';
 import Notiflix from 'notiflix';
- import SimpleLightbox from 'simplelightbox';
- import 'simplelightbox/dist/simple-lightbox.min.css';
-//  import OnlyScroll from 'only-scrollbar';
-// // ------------------------------ 1 Форма пошуку-------------------------
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+
 
 const form = document.querySelector('.search-form');
 const loadMore = document.querySelector('.load-more')
 const gallery = document.querySelector('.gallery');
 
+const searchQuery = document.querySelector('input[name="searchQuery"]');
+
 form.addEventListener('submit', onInput);
 loadMore.addEventListener('click', onClick);
 
-loadMore.style.visibility = "hidden";
+loadMore.style.visibility = 'hidden';
 
-let currentPage = 1;
-let searchImg = null;
+const clear = elems => [...elems.children].forEach(div => div.remove());
+
+export let perPage = 40;
+let currentPage = 0;
+let searchName = searchQuery.value;
+
+// // ------------------------------ 1 Форма пошуку-------------------------
+
+
 
     function onInput(evt) {
-     evt.preventDefault();
+      evt.preventDefault();
+      clear(gallery);
+  
+      searchName = searchQuery.value;
+      console.log(searchName);
 
-       const { elements: { searchQuery } } = evt.currentTarget;
-      searchImg = searchQuery.value.trim();
-      gallery.innerHTML = '';
-      if (searchImg) {
-   
-        axiosImages(searchImg, currentPage)
+      currentPage = 1;
+    
+      if (!searchName) {
+        Notiflix.Notify.failure(
+          'Sorry, there are no images matching your search query. Please try again.',
+        );
+        clear(gallery);
+        return;
+      } 
+    
+      if (searchName) {
+        axiosImages(searchName, currentPage)
           .then(data => {
-            if (data.total) {
-                formFixed();
+
+            console.log(`Number of arrays: ${data.hits.length}`);   
+            console.log(`Total hits: ${data.totalHits}`);
+            let totalPages = Math.ceil(data.totalHits / perPage);
+            console.log(`Total pages: ${totalPages}`);
+
+            if (data.hits.length > 0) {
+              Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
               gallery.insertAdjacentHTML('beforeend', createMarkup(data));
-              Notiflix.Notify.success(`Hooray! We found ${data.total} images.`);
-              viewsBigImg();
-              scrollGallery();
+
+              console.log(`Current page: ${currentPage}`);
               loadMore.style.visibility = 'visible';
-            } 
-           
+              lightbox();
+              formFixed();
+              scrollGallery();
+      }  
         })
         .catch(err => console.log(err));
     }  
-        }
+  }
   
 // ------------------------------ 1 Форма пошуку-------------------------
 
 function onClick(){
-    currentPage++;
-    axiosImages(searchImg, currentPage)
+searchName = searchQuery.value;
+    console.log('load more images');
+    currentPage += 1;
+  
+    axiosImages(searchName, currentPage)
     .then(data => {
-      if (data.total) {
+        let totalPages = Math.ceil(data.totalHits / perPage);
         gallery.insertAdjacentHTML('beforeend', createMarkup(data));
-        viewsBigImg();
-        let totalPageImg = 40 * currentPage;
-        if (totalPageImg === data.total){
+        scrollGallery();
+          lightbox();
+          console.log(`Current page: ${currentPage}`);
+
+        if (currentPage > totalPages){
+          loadMore.style.visibility = "hidden";
               Notiflix.Notify.info(
                 "We're sorry, but you've reached the end of search results.");
-              loadMore.style.visibility = "hidden";
-           
             }  
-      }})
-      .catch(err => console.log(err));
-    //  let totalPageImg = 40 * currentPage;
-    //     if (totalPageImg >= data.total){
-    //           Notiflix.Notify.info(
-    //             "We're sorry, but you've reached the end of search results.");
-    //           loadMore.style.visibility = "hidden";
-    //         }    
+      }
+      )
 }
+
 //-------------------------------- 4 скрол --------------------------
 function scrollGallery() {
-    const { height } = gallery.firstElementChild.getBoundingClientRect();
-  
-    window.scrollBy({
-      top: height * 2,
-      behavior: 'smooth',
-    });
-//     const scroll = new OnlyScroll(gallery, {
-//         damping: 4,
-     
-//         eventContainer: window});
-// scroll.destroy();
+      const { height: cardHeight } = document
+        .querySelector('.gallery')
+        .firstElementChild.getBoundingClientRect();
+
+      window.scrollBy({
+        top: cardHeight * 2,
+        behavior: 'smooth',
+      });
+
   }
 //-------------------------------- 5 закріплена шапка --------------------------
 function formFixed (){
@@ -100,8 +122,10 @@ function formFixed (){
 
 //-------------------------------- 6 для перегляду фото --------------------------
 
-  function viewsBigImg() {
-   const viewsImg = new SimpleLightbox('.gallery a');
+  function lightbox() {
+      const viewsImg = new SimpleLightbox('.gallery a');
+      viewsImg.refresh()
+
   }
 // -------------------------------3 Галерея і картка зображення --------------
 
@@ -127,6 +151,8 @@ function createMarkup(data){
            </div>
          </li>`
     ).join("");
-    
+   
     }
+
+
 
