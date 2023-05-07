@@ -34,6 +34,7 @@ let searchName = searchQuery.value;
       currentPage = 1;
     
       if (!searchName) {
+        loadMore.style.visibility = 'hidden';
         Notiflix.Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.',
         );
