@@ -25,8 +25,6 @@ let searchName = searchQuery.value;
 
 // // ------------------------------ 1 Форма пошуку-------------------------
 
-
-
     function onInput(evt) {
       evt.preventDefault();
       clear(gallery);
@@ -71,25 +69,27 @@ let searchName = searchQuery.value;
 // ------------------------------ 1 Форма пошуку-------------------------
 
 function onClick(){
-searchName = searchQuery.value;
-    console.log('load more images');
-    currentPage += 1;
+      searchName = searchQuery.value;
   
+    currentPage += 1;
+    let totalPages = Math.ceil(data.totalHits / perPage);
     axiosImages(searchName, currentPage)
     .then(data => {
-        let totalPages = Math.ceil(data.totalHits / perPage);
+      if(data.total){
+       
         gallery.insertAdjacentHTML('beforeend', createMarkup(data));
         scrollGallery();
           lightbox();
           console.log(`Current page: ${currentPage}`);
-
-        if (currentPage > totalPages){
+      } else  if (currentPage > totalPages){
           loadMore.style.visibility = "hidden";
               Notiflix.Notify.info(
                 "We're sorry, but you've reached the end of search results.");
-            }  
+              loadMore.style.visibility = "hidden";
+
+            }          
       }
-      )
+      ).catch(err => console.log(err));
 }
 
 //-------------------------------- 4 скрол --------------------------
