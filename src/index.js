@@ -7,7 +7,7 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 
 
 const form = document.querySelector('.search-form');
-const loadMore = document.querySelector('.load-more')
+export const loadMore = document.querySelector('.load-more')
 const gallery = document.querySelector('.gallery');
 
 const searchQuery = document.querySelector('input[name="searchQuery"]');
@@ -34,7 +34,7 @@ let searchName = searchQuery.value;
       currentPage = 1;
     
       if (!searchName) {
-        loadMore.style.visibility = 'hidden';
+       
         Notiflix.Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.',
         );
