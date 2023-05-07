@@ -23,6 +23,7 @@ export let perPage = 40;
 let currentPage = 0;
 let searchName = searchQuery.value;
 
+
 // // ------------------------------ 1 Форма пошуку-------------------------
 
     function onInput(evt) {
@@ -30,8 +31,6 @@ let searchName = searchQuery.value;
       clear(gallery);
   
       searchName = searchQuery.value;
-      console.log(searchName);
-
       currentPage = 1;
     
       if (!searchName) {
@@ -45,17 +44,10 @@ let searchName = searchQuery.value;
       if (searchName) {
         axiosImages(searchName, currentPage)
           .then(data => {
-
-            console.log(`Number of arrays: ${data.hits.length}`);   
-            console.log(`Total hits: ${data.totalHits}`);
-            let totalPages = Math.ceil(data.totalHits / perPage);
-            console.log(`Total pages: ${totalPages}`);
-
             if (data.hits.length > 0) {
               Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
               gallery.insertAdjacentHTML('beforeend', createMarkup(data));
 
-              console.log(`Current page: ${currentPage}`);
               loadMore.style.visibility = 'visible';
               lightbox();
               formFixed();
@@ -65,31 +57,28 @@ let searchName = searchQuery.value;
         .catch(err => console.log(err));
     }  
   }
+
   
 // ------------------------------ 1 Форма пошуку-------------------------
 
 function onClick(){
-      searchName = searchQuery.value;
-  
+    searchName = searchQuery.value;
     currentPage += 1;
-    let totalPages = Math.ceil(data.totalHits / perPage);
+   
     axiosImages(searchName, currentPage)
-    .then(data => {
-      if(data.total){
-       
+    .then(data => {    
+      let totalPages = Math.ceil(data.totalHits / perPage);
         gallery.insertAdjacentHTML('beforeend', createMarkup(data));
         scrollGallery();
           lightbox();
-          console.log(`Current page: ${currentPage}`);
-      } else  if (currentPage > totalPages){
+
+       if (currentPage >= totalPages){
           loadMore.style.visibility = "hidden";
               Notiflix.Notify.info(
                 "We're sorry, but you've reached the end of search results.");
-              loadMore.style.visibility = "hidden";
 
             }          
-      }
-      ).catch(err => console.log(err));
+      }) .catch(error => console.log(error));
 }
 
 //-------------------------------- 4 скрол --------------------------
@@ -102,7 +91,6 @@ function scrollGallery() {
         top: cardHeight * 2,
         behavior: 'smooth',
       });
-
   }
 //-------------------------------- 5 закріплена шапка --------------------------
 function formFixed (){
@@ -153,6 +141,3 @@ function createMarkup(data){
     ).join("");
    
     }
-
-
-
