@@ -24,7 +24,7 @@ let currentPage = 0;
 let searchName = searchQuery.value;
 
 
-// // ------------------------------ 1 Форма пошуку-------------------------
+// ------------------------------ 1 Форма пошуку-------------------------
 
     function onInput(evt) {
       evt.preventDefault();
@@ -32,7 +32,7 @@ let searchName = searchQuery.value;
   
       searchName = searchQuery.value;
       currentPage = 1;
-    
+     
       if (!searchName) {
        
         Notiflix.Notify.failure(
@@ -45,8 +45,11 @@ let searchName = searchQuery.value;
       if (searchName) {
         axiosImages(searchName, currentPage)
           .then(data => {
+            let totalPages = Math.ceil(data.totalHits / perPage);
+
             if (data.hits.length > 0) {
               Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
+            
               gallery.insertAdjacentHTML('beforeend', createMarkup(data));
 
               loadMore.style.visibility = 'visible';
@@ -54,6 +57,13 @@ let searchName = searchQuery.value;
               formFixed();
               scrollGallery();
       }  
+      
+      if (currentPage === totalPages){
+        loadMore.style.visibility = 'hidden';
+            Notiflix.Notify.info(
+              "We're sorry, but you've reached the end of search results.");
+
+          } 
         })
         .catch(err => console.log(err));
     }  
@@ -68,12 +78,14 @@ function onClick(){
    
     axiosImages(searchName, currentPage)
     .then(data => {    
-      let totalPages = Math.ceil(data.totalHits / perPage);
+      let totalPagess = Math.ceil(data.totalHits / perPage);
+     
         gallery.insertAdjacentHTML('beforeend', createMarkup(data));
         scrollGallery();
-          lightbox();
+          lightbox().refresh();
+          
 
-       if (currentPage >= totalPages){
+       if (currentPage >= totalPagess){
           loadMore.style.visibility = "hidden";
               Notiflix.Notify.info(
                 "We're sorry, but you've reached the end of search results.");
@@ -110,12 +122,9 @@ function formFixed (){
 }
 
 //-------------------------------- 6 для перегляду фото --------------------------
+const lightbox = () => new SimpleLightbox('.gallery a', {});
 
-  function lightbox() {
-      const viewsImg = new SimpleLightbox('.gallery a');
-      viewsImg.refresh()
 
-  }
 // -------------------------------3 Галерея і картка зображення --------------
 
 function createMarkup(data){
